@@ -15,7 +15,7 @@ function readStream(stream) {
   return pipe(
     stream.source,
     lp.decode(),
-    map((msg) => msg.slice())
+    map((msg) => msg.slice().toString())
   );
 }
 

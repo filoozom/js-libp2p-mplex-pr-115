@@ -30,11 +30,20 @@ const { readStream, writeStream } = require("./streams");
   const reader = readStream(stream);
   const writer = writeStream(stream);
 
+  const close = () => {
+    console.log("Received invalid message");
+    stream.close();
+  };
+
   // Write syn
   await writer.write("syn");
 
   // Read synack and close read steram
-  await reader.next();
+  const { value: synAck } = await reader.next();
+  if (synAck !== "synAck") {
+    close();
+    return;
+  }
   await stream.closeRead();
 
   // Write ack

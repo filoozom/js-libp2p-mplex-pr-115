@@ -22,21 +22,38 @@ const { readStream, writeStream } = require("./streams");
   });
 
   node.handle("/close/1.0.0", async ({ stream }) => {
-    const reader = readStream(stream);
-    const writer = writeStream(stream);
+    try {
+      const reader = readStream(stream);
+      const writer = writeStream(stream);
 
-    // Read syn
-    await reader.next();
+      const close = () => {
+        console.log("Received invalid message");
+        stream.close();
+      };
 
-    // Write synack and close write stream
-    writer.write("synack");
-    await stream.closeWrite();
+      // Read syn
+      const { value: syn } = await reader.next();
+      if (syn !== "syn") {
+        close();
+        return;
+      }
 
-    // Read ack and close read stream
-    await reader.next();
-    await stream.closeRead();
+      // Write synack and close write stream
+      writer.write("synAck");
+      await stream.closeWrite();
 
-    console.log(stream.timeline);
+      // Read ack and close read stream
+      const { value: ack } = await reader.next();
+      if (ack !== "ack") {
+        close();
+        return;
+      }
+      await stream.closeRead();
+
+      console.log(stream.timeline);
+    } finally {
+      await node.stop();
+    }
   });
 
   await node.start();
