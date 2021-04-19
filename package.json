@@ -1,0 +1,19 @@
+{
+  "name": "pr-115",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "it-length-prefixed": "^5.0.2",
+    "it-pipe": "^1.1.0",
+    "libp2p": "^0.30.12",
+    "libp2p-mplex": "github:libp2p/js-libp2p-mplex#pull/115/head",
+    "libp2p-noise": "^2.0.5",
+    "libp2p-tcp": "^0.15.4",
+    "multiaddr": "^9.0.1",
+    "streaming-iterables": "^5.0.4"
+  }
+}
