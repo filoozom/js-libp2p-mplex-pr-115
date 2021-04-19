@@ -30,13 +30,16 @@ const { readStream, writeStream } = require("./streams");
   const reader = readStream(stream);
   const writer = writeStream(stream);
 
-  // Write a message and close the write stream
-  writer.write("dialer");
-  await stream.closeWrite();
+  // Write syn
+  await writer.write("syn");
 
-  // Read one message and close the read stream
+  // Read synack and close read steram
   await reader.next();
   await stream.closeRead();
+
+  // Write ack
+  await writer.write("ack");
+  await stream.closeWrite();
 
   console.log(stream.timeline);
 })();
